@@ -1,6 +1,62 @@
 import pygame 
 from teclado_mouse import *
 
+
+class menu(pygame.sprite.Sprite):
+    def __init__(self,ventana_info,opcion=0):
+        pygame.sprite.Sprite.__init__(self)
+        self.ventana = pygame.display.set_mode((ventana_info["ancho"],ventana_info["alto"]))
+        pygame.display.set_caption(ventana_info["titulo"]) 
+        self.ventana.fill(ventana_info["color_fondo"])
+
+        self.fondo = pygame.image.load("imagenes/fondo_1080x720.png")
+        self.ventana.blit(self.fondo, (0,0))
+
+        self.opciones = [
+            pygame.image.load("imagenes/opcion_1.png"),
+            pygame.image.load("imagenes/opcion_2.png"),
+            pygame.image.load("imagenes/exit.png")
+            ]
+        self.poscion_opcion = [90,300]
+        self.opcion = opcion 
+        print ("sel.opcion: ",self.opcion)
+        self.flecha = pygame.image.load("imagenes/flechita.png")
+
+        self.tecla = comando()
+
+        ## ejecucion desde ahora
+    
+        self.__listar_opciones()
+        self.__cursor()
+        pygame.display.update()
+        
+    
+    def __listar_opciones(self):
+        nuemro_opcion = 0
+        for op in self.opciones:
+            self.ventana.blit(op, (self.poscion_opcion[0],self.poscion_opcion[1]+ 50*nuemro_opcion))
+            nuemro_opcion = nuemro_opcion + 1
+
+    def __cursor(self):
+        if self.tecla == "DOWN":
+            self.opcion += 1
+            if self.opcion == len(self.opciones)-1:
+                self.opcion = 0
+        if self.tecla == "UP":
+            self.opcion -= 1
+            if self.opcion < 0:
+                self.opcion = len(self.opciones)-1  
+        self.ventana.blit(self.flecha, (self.poscion_opcion[0]-50, self.poscion_opcion[1]+ 50*self.opcion))          
+
+    def resultado(self):
+        op = self.opcion
+        print (op)
+        return op
+        
+
+        
+''' 
+
 def menu(ventana_info):
     while True:
         pygame.init()
@@ -39,6 +95,7 @@ def menu(ventana_info):
                 sys.exit()
             if opcion == 0:
                 print ("ejecuta opcion 1")
+                fadeout = True
             if opcion == 1:
                 print ("ejecutar opcion 2")
         
@@ -48,7 +105,18 @@ def menu(ventana_info):
             ventana.blit(op, (90,op_pos[1]+ 50*cant_op))
             cant_op = cant_op + 1
 
+        if "fadeout_alfa" in locals():
+            pass
+        else:
+            fadeout_alfa = 0
+        if "fadeout" in locals():
+            if fadeout:
+                ventana.fill((0,0,0,fadeout_alfa))
+                #ventana.set_alpha(fadeout_alfa)
+                fadeout_alfa = fadeout_alfa +1 
+
+        
         pygame.display.update()
 
-
+ '''
 
