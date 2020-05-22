@@ -39,10 +39,6 @@ def pritnar_flecha(ventana,menu,posicion_arbol,arribaabajo):
     ventana.blit(menus["flecha"], (en_x,en_y))
     return (opcion_seleccionada)
 
-def pantalla_a_negro(ventana):
-    for a in range(255):
-        ventana.fill((0,0,0,a))
-
 
 def menu(ventana_info):
     posicion_flecha = 0
