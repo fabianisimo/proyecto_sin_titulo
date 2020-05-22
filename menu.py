@@ -1,139 +1,93 @@
 import pygame 
 from teclado_mouse import *
-
-
-class menu(pygame.sprite.Sprite):
-    def __init__(self,ventana_info,datos={"opcion": 0, "en_menu": True}):
-        pygame.sprite.Sprite.__init__(self)
-        self.ventana = pygame.display.set_mode((ventana_info["ancho"],ventana_info["alto"]))
-        pygame.display.set_caption(ventana_info["titulo"]) 
-        self.ventana.fill(ventana_info["color_fondo"])
-
-        self.fondo = pygame.image.load("imagenes/fondo_1080x720.png")
-        self.ventana.blit(self.fondo, (0,0))
-
-        self.opciones = [
+        
+menus = {
+    "flecha" : pygame.image.load("imagenes/flechita.png"),
+    "menu_inicial" : [
+            pygame.image.load("imagenes/opcion_1.png"),
+            pygame.image.load("imagenes/opcion_2.png"),
+            pygame.image.load("imagenes/exit.png")
+            ],
+    "menu_dos" : [
             pygame.image.load("imagenes/opcion_1.png"),
             pygame.image.load("imagenes/opcion_2.png"),
             pygame.image.load("imagenes/exit.png")
             ]
-        self.poscion_opcion = [90,300]
-        self.opcion = datos["opcion"] 
-        self.en_menu = datos["en_menu"]
-        self.flecha = pygame.image.load("imagenes/flechita.png")
+}
 
-        self.tecla = comando()
+def printar_menu(ventana,menu,posicion_arbol):  ## posicion arbol parte en 0
+    posicion_base = [90,300]
+    lista_opciones = menu
+    contador_printar = 0
+    for opcion in lista_opciones:
+        en_x = posicion_base[0] + posicion_arbol*350 
+        en_y = posicion_base[1] + contador_printar*50
+        ventana.blit(opcion, (en_x,en_y))
+        contador_printar += 1
 
-        ## ejecucion desde ahora
-    
-        self.__listar_opciones()
-        self.__cursor()
-        pygame.display.update()
+def pritnar_flecha(ventana,menu,posicion_arbol,arribaabajo):
+    posicion_base = [90,300]
+    listado_opciones = menu
+    opcion_seleccionada = arribaabajo
+    if opcion_seleccionada >= len(menu):
+        opcion_seleccionada = opcion_seleccionada % len(menu)  
+    if opcion_seleccionada < 0:
+        opcion_seleccionada = len(menu)-1 - (((opcion_seleccionada*-1)+len(menu)-1) % len(menu))
+    en_x = posicion_base[0] - 40 + 350*posicion_arbol
+    en_y = posicion_base[1] + opcion_seleccionada*50
+    #print ("len menu: ",len(menu)," opcion: ",opcion_seleccionada, "  en_x: ",en_x, "  en_y: ", en_y)
+    ventana.blit(menus["flecha"], (en_x,en_y))
+    return (opcion_seleccionada)
 
-        recursividad = {"opcion": self.opcion, "en_menu": self.en_menu}
-        if datos["en_menu"]:
-            menu(ventana_info,recursividad)
-        else:
-            self.resultado()   
-        
-    
-    def __listar_opciones(self):
-        nuemro_opcion = 0
-        for op in self.opciones:
-            self.ventana.blit(op, (self.poscion_opcion[0],self.poscion_opcion[1]+ 50*nuemro_opcion))
-            nuemro_opcion = nuemro_opcion + 1
+def pantalla_a_negro(ventana):
+    for a in range(255):
+        ventana.fill((0,0,0,a))
 
-    def __cursor(self):
-        if self.tecla == "DOWN":
-            self.opcion += 1
-            if self.opcion == len(self.opciones):
-                self.opcion = 0
-        if self.tecla == "UP":
-            self.opcion -= 1
-            if self.opcion < 0:
-                self.opcion = len(self.opciones)-1  
-
-        if self.tecla == "ENTER" or self.tecla == "SPACE":
-            if self.opcion == 2:
-                pygame.quit()
-                sys.exit()
-            if self.opcion == 0:
-                self.en_menu = False
-
-        self.ventana.blit(self.flecha, (self.poscion_opcion[0]-50, self.poscion_opcion[1]+ 50*self.opcion))   
-
-    def resultado(self):
-        print ("ocpion  1 elegido")
-        rerere = "a"
-        return rerere  
-        print (rerere)     
-
-    
-        
-
-        
-''' 
 
 def menu(ventana_info):
+    posicion_flecha = 0
+    opcion_1 = False
+    a = 0
+    apagandose = False
     while True:
         pygame.init()
         ventana = pygame.display.set_mode((ventana_info["ancho"],ventana_info["alto"]))
         pygame.display.set_caption(ventana_info["titulo"]) 
-        ventana.fill(ventana_info["color_fondo"])
         
         fondo = pygame.image.load("imagenes/fondo_1080x720.png")
         ventana.blit(fondo, (0,0))
-
-        opciones = [
-            pygame.image.load("imagenes/opcion_1.png"),
-            pygame.image.load("imagenes/opcion_2.png"),
-            pygame.image.load("imagenes/exit.png")]
-        flecha = pygame.image.load("imagenes/flechita.png")
-
-        if "opcion" in locals():                ## para poner la flecha en 0 por defecto
-            pass
-        else:
-            opcion = 0                          ## // 
-        cant_op = 0
-        op_pos = [90,300]
+        printar_menu(ventana,menus["menu_inicial"],0)
 
         tecla = comando()
-        if tecla == "DOWN":                 ## si se apreta la flecha abajo
-            opcion = opcion + 1
-            if opcion == len(opciones):
-                opcion = 0
         if tecla == "UP":
-            opcion = opcion - 1
-            if opcion < 0:
-                opcion = len(opciones)-1
-        if tecla == "SPACE" or tecla == "ENTER":
-            if opcion == len(opciones)-1:
-                pygame.quit()
-                sys.exit()
-            if opcion == 0:
-                print ("ejecuta opcion 1")
-                fadeout = True
-            if opcion == 1:
-                print ("ejecutar opcion 2")
+            posicion_flecha -= 1
+        if tecla == "DOWN":
+            posicion_flecha += 1
+
+        if opcion_1 == False:
+            opcion_seleccionada  = pritnar_flecha(ventana,menus["menu_inicial"],0,posicion_flecha)
+            if tecla == "ENTER":
+                if opcion_seleccionada == 2:
+                    apagandose = True
+                if opcion_seleccionada == 1:
+                    opcion_1 = True
+                    menu_0 = False
         
-        ventana.blit(flecha, (op_pos[0] - 40 , op_pos[1]+ 50*opcion))
-
-        for op in opciones:
-            ventana.blit(op, (90,op_pos[1]+ 50*cant_op))
-            cant_op = cant_op + 1
-
-        if "fadeout_alfa" in locals():
-            pass
-        else:
-            fadeout_alfa = 0
-        if "fadeout" in locals():
-            if fadeout:
-                ventana.fill((0,0,0,fadeout_alfa))
-                #ventana.set_alpha(fadeout_alfa)
-                fadeout_alfa = fadeout_alfa +1 
-
+        if opcion_1:
+            printar_menu(ventana,menus["menu_dos"],1)
+            opcion_seleccionada_1 = pritnar_flecha(ventana,menus["menu_dos"],1,posicion_flecha-opcion_seleccionada)
+            if tecla == "ENTER":
+                if opcion_seleccionada_1 == 2:
+                    opcion_1 = False
         
+        if apagandose:
+            fade = pygame.image.load("imagenes/fondo_fade.png")
+            fade = fade.convert()
+            fade.set_alpha(a)
+            ventana.blit(fade, (0,0))
+            a += 10
+            if a == 350:
+                exit()
+
         pygame.display.update()
-
- '''
 

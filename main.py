@@ -14,7 +14,6 @@ Game_over = False
 
 
 while Game_over == False:
-    if menu(ventana_info) == "a":
-        print ("salio del menu")
+    menu(ventana_info) 
 
 

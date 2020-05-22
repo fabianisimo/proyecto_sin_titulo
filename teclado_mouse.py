@@ -1,11 +1,14 @@
 import pygame 
 import sys
 
+def exit():
+    pygame.quit()
+    sys.exit()
+
 def comando():
     for evento in pygame.event.get(): 
         if evento.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()                  
+            exit()               
         if evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_SPACE:
                 return "SPACE"
