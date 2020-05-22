@@ -3,7 +3,7 @@ from teclado_mouse import *
 
 
 class menu(pygame.sprite.Sprite):
-    def __init__(self,ventana_info,opcion=0):
+    def __init__(self,ventana_info,datos={"opcion": 0, "en_menu": True}):
         pygame.sprite.Sprite.__init__(self)
         self.ventana = pygame.display.set_mode((ventana_info["ancho"],ventana_info["alto"]))
         pygame.display.set_caption(ventana_info["titulo"]) 
@@ -18,8 +18,8 @@ class menu(pygame.sprite.Sprite):
             pygame.image.load("imagenes/exit.png")
             ]
         self.poscion_opcion = [90,300]
-        self.opcion = opcion 
-        print ("sel.opcion: ",self.opcion)
+        self.opcion = datos["opcion"] 
+        self.en_menu = datos["en_menu"]
         self.flecha = pygame.image.load("imagenes/flechita.png")
 
         self.tecla = comando()
@@ -29,6 +29,12 @@ class menu(pygame.sprite.Sprite):
         self.__listar_opciones()
         self.__cursor()
         pygame.display.update()
+
+        recursividad = {"opcion": self.opcion, "en_menu": self.en_menu}
+        if datos["en_menu"]:
+            menu(ventana_info,recursividad)
+        else:
+            self.resultado()   
         
     
     def __listar_opciones(self):
@@ -40,18 +46,29 @@ class menu(pygame.sprite.Sprite):
     def __cursor(self):
         if self.tecla == "DOWN":
             self.opcion += 1
-            if self.opcion == len(self.opciones)-1:
+            if self.opcion == len(self.opciones):
                 self.opcion = 0
         if self.tecla == "UP":
             self.opcion -= 1
             if self.opcion < 0:
                 self.opcion = len(self.opciones)-1  
-        self.ventana.blit(self.flecha, (self.poscion_opcion[0]-50, self.poscion_opcion[1]+ 50*self.opcion))          
+
+        if self.tecla == "ENTER" or self.tecla == "SPACE":
+            if self.opcion == 2:
+                pygame.quit()
+                sys.exit()
+            if self.opcion == 0:
+                self.en_menu = False
+
+        self.ventana.blit(self.flecha, (self.poscion_opcion[0]-50, self.poscion_opcion[1]+ 50*self.opcion))   
 
     def resultado(self):
-        op = self.opcion
-        print (op)
-        return op
+        print ("ocpion  1 elegido")
+        rerere = "a"
+        return rerere  
+        print (rerere)     
+
+    
         
 
         
