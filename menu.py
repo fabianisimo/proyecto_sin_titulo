@@ -1,4 +1,5 @@
 import pygame 
+import sys
 from teclado_mouse import *
         
 menus = {
@@ -14,6 +15,7 @@ menus = {
             pygame.image.load("imagenes/exit.png")
             ]
 }
+
 
 def printar_menu(ventana,menu,posicion_arbol):  ## posicion arbol parte en 0
     posicion_base = [90,300]
@@ -41,13 +43,16 @@ def pritnar_flecha(ventana,menu,posicion_arbol,arribaabajo):
 
 
 def menu(ventana_info):
+    en_menu = True
     posicion_flecha = 0
     opcion_1 = False
     a = 0
     apagandose = False
-    while True:
+    entrando_al_juego, y_fondo = False, 0
+    
+    while en_menu:
         pygame.init()
-        ventana = pygame.display.set_mode((ventana_info["ancho"],ventana_info["alto"]))
+        ventana = pygame.display.set_mode((ventana_info["ancho"],ventana_info["alto"]),pygame.RESIZABLE)
         pygame.display.set_caption(ventana_info["titulo"]) 
         
         fondo = pygame.image.load("imagenes/fondo_1080x720.png")
@@ -68,6 +73,8 @@ def menu(ventana_info):
                 if opcion_seleccionada == 1:
                     opcion_1 = True
                     menu_0 = False
+                if opcion_seleccionada == 0:
+                    entrando_al_juego = True
         
         if opcion_1:
             printar_menu(ventana,menus["menu_dos"],1)
@@ -84,6 +91,18 @@ def menu(ventana_info):
             a += 10
             if a == 350:
                 exit()
+
+        if entrando_al_juego:
+            fondo_slice = pygame.image.load("imagenes/fondo_slice.png")
+            fondo_slice = fondo_slice.convert()
+            fondo_slice.set_alpha(a)
+            ventana.blit(fondo_slice, (0,y_fondo))
+            a += 30
+            if a >= 300:
+                if y_fondo > 720-1500:
+                    y_fondo -= 20
+                else: 
+                    en_menu = False
 
         pygame.display.update()
 
