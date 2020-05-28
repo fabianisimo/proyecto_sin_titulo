@@ -12,6 +12,8 @@ def comando():
         if evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_SPACE:
                 return "SPACE"
+            if evento.key == pygame.K_ESCAPE:
+                return "ESC"
             if evento.key == pygame.K_w:
                 return "W"
             if evento.key == pygame.K_LEFT:

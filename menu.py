@@ -43,6 +43,7 @@ def pritnar_flecha(ventana,menu,posicion_arbol,arribaabajo):
 
 
 def menu(ventana_info):
+    print ("en menu")
     en_menu = True
     posicion_flecha = 0
     opcion_1 = False
@@ -100,7 +101,7 @@ def menu(ventana_info):
             a += 30
             if a >= 300:
                 if y_fondo > 720-1500:
-                    y_fondo -= 20
+                    y_fondo -= 40
                 else: 
                     en_menu = False
 

@@ -2,6 +2,7 @@
 import pygame
 from menu import *
 from intro import *
+from juego import *
 import sys
 
 ventana_info = {
@@ -15,7 +16,8 @@ Game_over = False
 
 
 while Game_over == False:
-    intro(ventana_info)
+    intro(ventana_info)   
     menu(ventana_info) 
+    juego(ventana_info)
 
 

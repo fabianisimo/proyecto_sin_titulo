@@ -2,6 +2,7 @@ import pygame
 from teclado_mouse import *
 
 def intro(ventana_info):
+    print ("en intro")
     en_intro = True
     a = 0
     while en_intro == True:
